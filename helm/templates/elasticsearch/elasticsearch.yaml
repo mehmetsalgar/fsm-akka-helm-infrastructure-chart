@@ -1,0 +1,77 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ .Values.elasticsearch.name }}
+spec:
+  version: {{ .Values.elasticsearch.version }}
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+    - name: master
+      count: {{ .Values.elasticsearch.master.replicaCount }}
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: {{ .Values.elasticsearch.master.storageSize }}
+          {{- if .Values.elasticsearch.master.storageClass.enabled }}
+          {{- if .Values.elasticsearch.master.storageClass.name }}
+            storageClassName: {{ .Values.master.storageClass.name }}
+          {{- end }}
+          {{- end }}
+      config:
+        node.roles: ["master", "data", "ingest"]
+      podTemplate:
+        spec:
+          initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+          containers:
+            - name: elasticsearch
+              resources:
+                {{- toYaml .Values.elasticsearch.master.resources | nindent 16 }}
+        {{- if .Values.elasticsearch.master.noAffinity }}
+        affinity: {}
+        {{- end }}
+    - name: ingest-data
+      count: {{ .Values.elasticsearch.ingest_data.replicaCount }}
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: {{ .Values.elasticsearch.ingest_data.storageSize }}
+          {{- if .Values.elasticsearch.ingest_data.storageClass.enabled }}
+          {{- if .Values.elasticsearch.ingest_data.storageClass.name }}
+            storageClassName: {{ .Values.elasticsearch.master.storageClass.name }}
+          {{- end }}
+          {{- end }}
+      config:
+        node.roles: ["data", "ingest"]
+      podTemplate:
+        spec:
+          initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: [ 'sh', '-c', 'sysctl -w vm.max_map_count=262144' ]
+          containers:
+            - name: elasticsearch
+              resources:
+                {{- toYaml .Values.elasticsearch.ingest_data.resources | nindent 16 }}
+        {{- if .Values.elasticsearch.ingest_data.noAffinity }}
+        affinity: {}
+        {{- end }}

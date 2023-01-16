@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven { url "https://plugins.gradle.org/m2/"}
+    }
+
+    dependencies {
+        classpath "org.unbroken-dome.gradle-plugins.helm:helm-plugin:1.7.0"
+        classpath "org.unbroken-dome.gradle-plugins.helm:helm-publish-plugin:1.7.0"
+    }
+}
+
+apply plugin: 'org.unbroken-dome.helm'
+apply plugin: 'org.unbroken-dome.helm-publish'
+
+group 'org.salgar.akka.fsm'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    flag = true
+}
+
+if(ext.flag) {
+    ext.props = [
+            HELM_USER: property('HELM_USER'),
+            HELM_PASSWORD: property('HELM_PASSWORD')
+    ]
+}
+
+helm {
+    charts {
+        infrastructure {
+            publish = true
+            chartName = 'fsm-akka-infrastructure'
+            chartVersion = "${project.version}"
+            sourceDir = file('helm')
+            filtering {
+                values.put 'appVersion', "${project.version}-${gitBranch()}"
+            }
+        }
+    }
+    repositories {
+        infrastructure_rep {
+            url 'http://fsmakka.salgar.org/repository/fsm-akka-helm/'
+            credentials {
+                username = "${props.HELM_USER}"
+                password = "${props.HELM_PASSWORD}"
+            }
+        }
+    }
+    publishing {
+        repositories {
+            nexus {
+                url = uri('http://fsmakka.salgar.org/')
+                repository = 'fsm-akka-helm'
+                apiVersion = 'v1'
+                credentials {
+                    username = "${props.HELM_USER}"
+                    password = "${props.HELM_PASSWORD}"
+                }
+            }
+        }
+    }
+}
+
+def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
+}

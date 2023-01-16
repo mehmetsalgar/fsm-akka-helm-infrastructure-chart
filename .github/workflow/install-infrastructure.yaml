@@ -1,0 +1,70 @@
+name: Install Infrastructure
+run-name: ${{ github.actor }}
+on:
+  workflow_dispatch:
+    inputs:
+      branch-name:
+        type: string
+jobs:
+  calculate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      semVer: ${{ steps.gitversion.outputs.semVer }}
+    steps:
+      - name: Display Branch
+        run: |
+          echo "Branch: ${{ github.ref }}"
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+      - name: Display GitVersion ouput
+        run: |
+          echo "SemVer: $GITVERSION_SEMVER"
+  install-infrastructure-helm-chart:
+    runs-on: ubuntu-latest
+    needs: calculate-version
+    env:
+      SEMVER: ${{ needs.calculate-version.outputs.semVer }}
+    steps:
+      - id: install-kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.26.0'
+      #  - id: kubectl-set-context
+      #    uses: azure/k8s-set-context@v1
+      #    with:
+      #      method: kubeconfig
+      #      kubeconfig: ''
+      #      context: 'k3d-poc-akka'
+      #      - name: Run Kubectl Command
+      #        run: |
+      #          kubectl version
+      - id: install
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.10.3'
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: findandreplace
+        uses: mad9000/actions-find-and-replace-string@2
+        with:
+          source: ${{ inputs.branch-name }}
+          find: '/'
+          replace: '-'
+      - name: Run Helm Command
+        run: |
+          cd helm
+          helm version
+          echo 'helm upgrade --install fsm-akka-infrastructure . -n ${{ steps.findandreplace.outputs.value }} -f values-dev.yaml --create-namespace --version=${{ env.SEMVER }}'
