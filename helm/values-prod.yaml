@@ -7,40 +7,40 @@ kafka:
       memory: "4Gi"
       cpu: "2"
     limit:
-      memory: 4Gi
+      memory: 16Gi
       cpu: "2"
   jvmOptions:
-    xms: 4Gi
-    xmx: 8Gi
+    xms: 8Gi
+    xmx: 16Gi
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
   version: "7.16.3-arm64"
   master:
     replicaCount: 3
-    storageSize: 2Gi
+    storageSize: 50Gi
     storageClass:
       enabled: false
       #name: disk
     resources:
       requests:
-        memory: 2Gi
-        cpu: 1
+        memory: 16Gi
+        cpu: "4"
       limits:
-        memory: 4Gi
-        cpu: 4
+        memory: 16Gi
+        cpu: "4"
     noAffinity: false
   ingest_data:
     replicaCount: 3
-    storageSize: 2Gi
+    storageSize: 50Gi
     storageClass:
       enabled: true
       #name: disk
     resources:
       request:
-        memory: 1Gi
-        cpu: 1
+        memory: 16Gi
+        cpu: 4
       limits:
-        memory: 4Gi
+        memory: 16Gi
         cpu: 4
     noAffinity: false
