@@ -1,0 +1,53 @@
+name: Build Infrastructure for Branch
+run-name: ${{ github.actor }}
+on:
+  workflow_dispatch:
+    inputs:
+      branch-name:
+        required: true
+        type: string
+      value-file:
+        required: true
+        type: string
+jobs:
+  calculate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      semVer: ${{ steps.gitversion.outputs.semVer }}
+    steps:
+      - name: Display Branch
+        run: |
+          echo "Branch: ${{ github.ref }}"
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+      - name: Display GitVersion ouput
+        run: |
+          echo "SemVer: $GITVERSION_SEMVER"
+  calculate-branch-name:
+    runs-on: ubuntu-latest
+    outputs:
+      branchName: ${{ steps.findandreplace.outputs.value }}
+    steps:
+      - id: findandreplace
+        uses: mad9000/actions-find-and-replace-string@2
+        with:
+          source: ${{ inputs.branch-name }}
+          find: '/'
+          replace: '-'
+  call-build-environment-for-future-branch:
+    needs: [calculate-branch-name, calculate-version]
+    uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
+    with:
+      helm-command: helm upgrade --install fsm-akka-infrastructure . -n ${{ needs.calculate-branch-name.outputs.branchName }} -f ${{ inputs.value-file }}.yaml --create-namespace --version=${{ needs.calculate-version.outputs.semVer }}
