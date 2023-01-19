@@ -35,8 +35,14 @@ jobs:
           source: ${{ inputs.branch-name }}
           find: '/'
           replace: '-'
+      - id: findandreplace1
+        uses: mad9000/actions-find-and-replace-string@2
+        with:
+          source: ${{ steps.findandreplace.outputs.value }}
+          find: '/'
+          replace: '-'
       - name: Run Helm Command
         run: |
           cd helm
           helm version
-          echo 'helm delete fsm-akka-infrastructure -n ${{ steps.findandreplace.outputs.value }}'
+          echo 'helm delete fsm-akka-infrastructure -n ${{ steps.findandreplace1.outputs.value }}'
