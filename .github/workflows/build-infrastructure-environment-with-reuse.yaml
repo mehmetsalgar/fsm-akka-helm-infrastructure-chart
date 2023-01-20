@@ -35,10 +35,10 @@ jobs:
       - name: Display GitVersion ouput
         run: |
           echo "SemVer: $GITVERSION_SEMVER"
-  calculate-branch-name:
+  calculate-namespace:
     runs-on: ubuntu-latest
     outputs:
-      branchName: ${{ steps.findandreplace1.outputs.value }}
+      namespace: ${{ steps.findandreplace1.outputs.value }}
     steps:
       - id: findandreplace
         uses: mad9000/actions-find-and-replace-string@2
@@ -53,7 +53,7 @@ jobs:
           find: '.'
           replace: '-'
   call-build-environment-for-future-branch:
-    needs: [calculate-branch-name, calculate-version]
+    needs: [calculate-namespace, calculate-version]
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     with:
-      helm-command: helm upgrade --install fsm-akka-infrastructure . -n ${{ needs.calculate-branch-name.outputs.branchName }} -f ${{ inputs.value-file }}.yaml --create-namespace --version=${{ needs.calculate-version.outputs.semVer }}
+      helm-command: helm upgrade --install fsm-akka-infrastructure . -n ${{ needs.calculate-namespace.outputs.namespace }} -f ${{ inputs.value-file }}.yaml --create-namespace --version=${{ needs.calculate-version.outputs.semVer }}
