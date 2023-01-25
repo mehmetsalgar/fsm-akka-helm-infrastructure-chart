@@ -52,7 +52,7 @@ jobs:
           source: ${{ steps.findandreplace.outputs.value }}
           find: '.'
           replace: '-'
-  call-build-environment-for-future-branch:
+  call-build-environment-for-branch:
     needs: [calculate-namespace, calculate-version]
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     with:
