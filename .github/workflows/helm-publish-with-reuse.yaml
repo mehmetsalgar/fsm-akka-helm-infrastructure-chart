@@ -1,5 +1,5 @@
 name: Helm Publish Infrastructure with Gradle
-run-name: ${{ github.actor }}
+run-name: Publishing Helm Chart for Infrastructure triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
   push:
     paths-ignore:
