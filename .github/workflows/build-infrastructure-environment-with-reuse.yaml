@@ -1,5 +1,5 @@
 name: Build Infrastructure for Branch
-run-name: ${{ github.actor }}
+run-name: Building an Infrastructure for Branch '${{ inputs.bracnh-name }}' triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
   workflow_dispatch:
     inputs:
