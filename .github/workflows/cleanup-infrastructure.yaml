@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       branch-name:
+        required: true
         type: string
 jobs:
   clean-environment-for-future-branch:
