@@ -1,5 +1,5 @@
 name: Clean Infrastructure for a Future Branch
-run-name: ${{ github.actor }}
+run-name: Cleaning up Infrastructure for Branch ${{ inputs.branch-name }} triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
   workflow_dispatch:
     inputs:
