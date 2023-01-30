@@ -1,6 +1,9 @@
 name: Helm Publish Infrastructure with Gradle
 run-name: ${{ github.actor }}
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - '.github/**'
 jobs:
   call-helm-publish:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-publish.yaml@master
