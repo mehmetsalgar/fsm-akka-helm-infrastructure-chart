@@ -1,0 +1,12 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: addressCheckSM
+  labels:
+    strimzi.io/cluster: {{ .Values.kafka.cluster-name }}
+spec:
+  partitions: {{ .Values.kafka.topics.partitions }}
+  replicas: {{ .Values.kafka.topics.replication-factor}}
+  config:
+    retention.ms: {{ .Values.kafka.topics.retention.ms }}
+    segment.bytes: {{ .Values.kafka.topics.segment.bytes }}

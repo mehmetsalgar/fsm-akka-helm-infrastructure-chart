@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
-  name: fsmakka-cluster
+  name: {{ .Values.kafka.cluster-name }}
 spec:
   kafka:
     replicas: {{ .Values.kafka.replicas }}

@@ -1,5 +1,6 @@
 # KAFKA #
 kafka:
+  cluster-name: fsmakka-cluster
   replicas: 1
   version: 3.3.1
   resources:
@@ -12,6 +13,13 @@ kafka:
   jvmOptions:
     xms: 2Gi
     xmx: 4Gi
+  topics:
+    replication-factor: 1
+    partitions: 1
+    retention:
+      ms: 7200000
+    segment:
+      bytes: 1073741824
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
