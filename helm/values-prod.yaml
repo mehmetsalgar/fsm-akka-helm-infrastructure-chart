@@ -12,6 +12,8 @@ kafka:
   jvmOptions:
     xms: 8Gi
     xmx: 16Gi
+  topics:
+    replication-factor: 3
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
