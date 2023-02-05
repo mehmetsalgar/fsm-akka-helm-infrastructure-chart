@@ -1,31 +1,14 @@
-# KAFKA #
-kafka:
-  cluster-name: fsmakka-cluster
-  replicas: 1
-  version: 3.3.1
-  resources:
-    request:
-      memory: "2Gi"
-      cpu: "1"
-    limit:
-      memory: 4Gi
-      cpu: "2"
-  jvmOptions:
-    xms: 2Gi
-    xmx: 4Gi
-  topics:
-    replication-factor: 1
-    partitions: 1
-    retention:
-      ms: 7200000
-    segment:
-      bytes: 1073741824
+# CASSANDRA #
+cassandra:
+  datacenter:
+    name: "dc1"
+    size: 1
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
   version: "7.16.3-arm64"
   master:
-    replicaCount: "1"
+    replicaCount: 1
     storageSize: 2Gi
     storageClass:
       enabled: false
@@ -33,10 +16,10 @@ elasticsearch:
     resources:
       requests:
         memory: 2Gi
-        cpu: "2"
+        cpu: 2
       limits:
         memory: 2Gi
-        cpu: "2"
+        cpu: 2
     noAffinity: false
   ingest_data:
     replicaCount: 2
@@ -47,8 +30,42 @@ elasticsearch:
     resources:
       request:
         memory: 2Gi
-        cpu: "2"
+        cpu: 2
       limits:
         memory: 2Gi
-        cpu: "2"
+        cpu: 2
     noAffinity: false
+# KAFKA #
+kafka:
+  clusterName: fsmakka-cluster
+  replicas: 1
+  version: 3.3.1
+  resources:
+    request:
+      memory: 2Gi
+      cpu: 1
+    limit:
+      memory: 4Gi
+      cpu: 2
+  jvmOptions:
+    xms: 2Gi
+    xmx: 4Gi
+  topics:
+    replicationFactor: 1
+    partitions: 1
+    retention:
+      ms: 7200000
+    segment:
+      bytes: 1073741824
+zookeeper:
+  replicas: 1
+  resources:
+    requests:
+      memory: 512m
+      cpu: 0.5
+    limits:
+      memory: 512m
+      cpu: 1
+  jvmOptions:
+    xms: 512m
+    xmx: 512m

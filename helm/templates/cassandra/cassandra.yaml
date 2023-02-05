@@ -7,8 +7,8 @@ spec:
     serverVersion: "4.0.1"
     datacenters:
       - metadata:
-          name: dc1
-        size: 3
+          name: {{ .Values.cassandra.datacenter.name }}
+        size: {{ .Values.cassandra.datacenter.size }}
         storageConfig:
           cassandraDataVolumeClaimSpec:
             storageClassName: standard
@@ -20,6 +20,3 @@ spec:
         config:
           jvmOptions:
             heap_initial_size: 512M
-        stargate:
-          size: 0
-          heapSize: 256M

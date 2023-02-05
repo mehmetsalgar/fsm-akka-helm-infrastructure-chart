@@ -3,10 +3,10 @@ kind: KafkaTopic
 metadata:
   name: creditSM
   labels:
-    strimzi.io/cluster: {{ .Values.kafka.cluster-name }}
+    strimzi.io/cluster: {{ .Values.kafka.clusterName }}
 spec:
   partitions: {{ .Values.kafka.topics.partitions }}
-  replicas: {{ .Values.kafka.topics.replication-factor }}
+  replicas: {{ .Values.kafka.topics.replicationFactor }}
   config:
     retention.ms: {{ .Values.kafka.topics.retention.ms }}
     segment.bytes: {{ .Values.kafka.topics.segment.bytes }}

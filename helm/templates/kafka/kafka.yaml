@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
-  name: {{ .Values.kafka.cluster-name }}
+  name: {{ .Values.kafka.clusterName }}
 spec:
   kafka:
     replicas: {{ .Values.kafka.replicas }}
@@ -74,21 +74,21 @@ spec:
           name: my-config-map
           key: my-key
   zookeeper:
-    replicas: 1
+    replicas: {{ .Values.zookeeper.replicas }}
     logging:
       type: inline
       loggers:
         zookeeper.root.logger: "INFO"
     resources:
       requests:
-        memory: 512m
-        cpu: "0.5"
+        memory: {{ .Values.zookeeper.resources.requests.memory }}
+        cpu: {{ .Values.zookeeper.resources.requests.cpu }}
       limits:
-        memory: 512Gi
-        cpu: "1"
+        memory: {{ .Values.zookeeper.resources.limits.memory }}
+        cpu: {{ .Values.zookeeper.resources.limits.cpu }}
     jvmOptions:
-      -Xms: 512m
-      -Xmx: 512m
+      -Xms: {{ .Values.zookeeper.jvmOptions.xms }}
+      -Xmx: {{ .Values.zookeeper.jvmOptions.xmx }}
     storage:
       type: persistent-claim
       size: 1000Gi
@@ -102,7 +102,7 @@ spec:
           cpu: 500m
           memory: 128Mi
     topicOperator:
-      watchedNamespace: fsmakka
+      watchedNamespace: {{ .Release.Namespace }}
       reconciliationIntervalSeconds: 60
       logging:
         type: inline
@@ -116,7 +116,7 @@ spec:
           memory: 512Mi
           cpu: "1"
     userOperator:
-      watchedNamespace: fsmakka
+      watchedNamespace: {{ .Release.Namespace }}
       reconciliationIntervalSeconds: 60
       logging:
         type: inline

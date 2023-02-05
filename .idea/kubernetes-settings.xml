@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="KubernetesSettings">
+    <specSources>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/elastic/cloud-on-k8s/main/deploy/eck-operator/charts/eck-operator-crds/templates/all-crds.yaml" />
+      </SpecSource>
+    </specSources>
+  </component>
+</project>

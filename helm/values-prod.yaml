@@ -1,19 +1,7 @@
-# KAFKA #
-kafka:
-  replicas: 3
-  version: 3.3.1
-  resources:
-    request:
-      memory: "4Gi"
-      cpu: "2"
-    limit:
-      memory: 16Gi
-      cpu: "2"
-  jvmOptions:
-    xms: 8Gi
-    xmx: 16Gi
-  topics:
-    replication-factor: 3
+# CASSANDRA #
+cassandra:
+  datacenter:
+    size: 3
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
@@ -46,3 +34,19 @@ elasticsearch:
         memory: 16Gi
         cpu: 4
     noAffinity: false
+# KAFKA #
+kafka:
+  replicas: 3
+  version: 3.3.1
+  resources:
+    request:
+      memory: "4Gi"
+      cpu: "2"
+    limit:
+      memory: 16Gi
+      cpu: "2"
+  jvmOptions:
+    xms: 8Gi
+    xmx: 16Gi
+  topics:
+    replication-factor: 3
