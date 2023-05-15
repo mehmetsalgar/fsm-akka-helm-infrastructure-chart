@@ -10,8 +10,8 @@ kafka:
       memory: 4Gi
       cpu: "2"
   jvmOptions:
-    xms: 4Gi
-    xmx: 8Gi
+    xms: 4G
+    xmx: 8G
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
