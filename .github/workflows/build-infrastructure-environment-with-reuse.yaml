@@ -38,7 +38,7 @@ jobs:
   calculate-namespace:
     runs-on: ubuntu-latest
     outputs:
-      namespace: ${{ steps.findandreplace1.outputs.value }}
+      namespace: ${{ steps.findandreplace2.outputs.value }}
     steps:
       - id: findandreplace
         uses: mad9000/actions-find-and-replace-string@2
@@ -51,6 +51,12 @@ jobs:
         with:
           source: ${{ steps.findandreplace.outputs.value }}
           find: '.'
+          replace: '-'
+      - id: findandreplace2
+        uses: mad9000/actions-find-and-replace-string@2
+        with:
+          source: ${{ steps.findandreplace1.outputs.value }}
+          find: '_'
           replace: '-'
   call-build-environment-for-branch:
     permissions:
