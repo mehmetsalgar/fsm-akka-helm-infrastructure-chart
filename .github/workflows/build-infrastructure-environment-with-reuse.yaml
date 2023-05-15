@@ -57,3 +57,4 @@ jobs:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     with:
       helm-command: helm upgrade --install fsm-akka-infrastructure . -n ${{ needs.calculate-namespace.outputs.namespace }} -f ${{ inputs.value-file }}.yaml --create-namespace --version=${{ needs.calculate-version.outputs.semVer }}
+    secrets: inherit
