@@ -10,9 +10,6 @@ on:
         required: true
         type: string
 jobs:
-  permissions:
-    contents: 'read'
-    id-token: 'write'
   calculate-version:
     runs-on: ubuntu-latest
     outputs:
@@ -56,6 +53,9 @@ jobs:
           find: '.'
           replace: '-'
   call-build-environment-for-branch:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     needs: [calculate-namespace, calculate-version]
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     with:
