@@ -10,6 +10,9 @@ on:
         required: true
         type: string
 jobs:
+  permissions:
+    contents: 'read'
+    id-token: 'write'
   calculate-version:
     runs-on: ubuntu-latest
     outputs:
