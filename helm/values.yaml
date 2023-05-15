@@ -23,7 +23,7 @@ elasticsearch:
     noAffinity: false
   ingest_data:
     replicaCount: 2
-    storageSize: 2Gi
+    storageSize: 2G
     storageClass:
       enabled: true
       #name: disk
@@ -48,8 +48,8 @@ kafka:
       memory: 4Gi
       cpu: 2
   jvmOptions:
-    xms: 2Gi
-    xmx: 4Gi
+    xms: 2G
+    xmx: 4G
   topics:
     replicationFactor: 1
     partitions: 1
