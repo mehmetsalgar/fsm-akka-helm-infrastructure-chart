@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
-  name: fraudPreventionSM
+  name: fraud-prevention-sm
   labels:
     strimzi.io/cluster: {{ .Values.kafka.clusterName }}
 spec:
