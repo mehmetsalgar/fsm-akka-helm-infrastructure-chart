@@ -40,5 +40,5 @@ jobs:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     needs: calculate-namespace
     with:
-      helm-command: "helm delete fsm-akka-infrastructure -n ${{ needs.calculate-namespace.outputs.branchName }}"
+      helm-command: "helm delete fsm-akka-infrastructure -n ${{ needs.calculate-namespace.outputs.namespace }}"
     secrets: inherit
