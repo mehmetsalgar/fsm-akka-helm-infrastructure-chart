@@ -1,14 +1,18 @@
 # CASSANDRA #
 cassandra:
+  enabled: true
   datacenter:
     name: "dc1"
     size: 1
 # ELASTICSEARCH #
 elasticsearch:
+  enabled: true
   name: "elasticsearch"
-  version: "7.16.3-arm64"
+  #M1
+  #version: "7.16.3-arm64"
+  version: "7.16.3"
   master:
-    replicaCount: 1
+    replicaCount: 3
     storageSize: 2Gi
     storageClass:
       enabled: false
@@ -23,7 +27,7 @@ elasticsearch:
     noAffinity: false
   ingest_data:
     replicaCount: 2
-    storageSize: 2G
+    storageSize: 2Gi
     storageClass:
       enabled: true
       #name: disk
@@ -37,9 +41,10 @@ elasticsearch:
     noAffinity: false
 # KAFKA #
 kafka:
+  enabled: true
   clusterName: fsmakka-cluster
   replicas: 1
-  version: 3.3.1
+  version: 3.3.2
   resources:
     request:
       memory: 2Gi
@@ -61,10 +66,10 @@ zookeeper:
   replicas: 1
   resources:
     requests:
-      memory: 512m
-      cpu: 0.5
+      memory: 256Mi
+      cpu: 500m
     limits:
-      memory: 512m
+      memory: 512Mi
       cpu: 1
   jvmOptions:
     xms: 512m

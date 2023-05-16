@@ -1,35 +1,21 @@
-# KAFKA #
-kafka:
-  replicas: 3
-  version: 3.3.1
-  resources:
-    request:
-      memory: "4Gi"
-      cpu: "2"
-    limit:
-      memory: 4Gi
-      cpu: "2"
-  jvmOptions:
-    xms: 4G
-    xmx: 8G
 # ELASTICSEARCH #
 elasticsearch:
   name: "elasticsearch"
-  version: "7.16.3-arm64"
+  #version: "7.16.3-arm64"
   master:
-    replicaCount: 3
+    replicaCount: 1
     storageSize: 2Gi
     storageClass:
       enabled: false
       #name: disk
     resources:
       requests:
-        memory: 2Gi
-        cpu: "1"
+        memory: 1Gi
+        cpu: 500m
       limits:
-        memory: 4Gi
-        cpu: "4"
-    noAffinity: false
+        memory: 2Gi
+        cpu: 2
+    noAffinity: true
   ingest_data:
     replicaCount: 3
     storageSize: 2Gi
@@ -39,8 +25,21 @@ elasticsearch:
     resources:
       request:
         memory: 1Gi
-        cpu: "1"
+        cpu: 500m
       limits:
-        memory: 4Gi
-        cpu: "4"
-    noAffinity: false
+        memory: 2Gi
+        cpu: 2
+    noAffinity: true
+# KAFKA #
+kafka:
+  replicas: 3
+  resources:
+    request:
+      memory: 4Gi
+      cpu: 2
+    limit:
+      memory: 4Gi
+      cpu: 2
+  jvmOptions:
+    xms: 4G
+    xmx: 8G

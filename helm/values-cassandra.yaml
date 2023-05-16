@@ -1,0 +1,6 @@
+cassandra:
+  enabled: true
+elasticsearch:
+  enabled: false
+kafka:
+  enabled: false
