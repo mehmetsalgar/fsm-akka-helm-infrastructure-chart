@@ -17,7 +17,7 @@ elasticsearch:
         cpu: 2
     noAffinity: true
   ingest_data:
-    replicaCount: 3
+    replicaCount: 1
     storageSize: 2Gi
     storageClass:
       enabled: true
@@ -32,7 +32,7 @@ elasticsearch:
     noAffinity: true
 # KAFKA #
 kafka:
-  replicas: 3
+  replicas: 1
   resources:
     request:
       memory: 4Gi
