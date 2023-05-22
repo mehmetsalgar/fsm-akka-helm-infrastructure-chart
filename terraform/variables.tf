@@ -26,19 +26,19 @@ variable "region" {
 }
 
 variable "subnetwork_ip_range" {
-  default = "10.40.0.0/14"
+  default = "10.156.0.0/20"
   description = "Google Cloud Subnetwork IP Range"
   type = string
 }
 
 variable "subnetwork_pods_ip_range" {
-  default = "10.41.0.0/14"
+  default = "10.92.0.0/14"
   description = "Google Cloud Subnetwork Pods IP Range"
   type = string
 }
 
 variable "subnetwork_services_ip_range" {
-  default = "10.42.0.0/20"
+  default = "10.96.0.0/20"
   description = "Google Cloud Subnetwork Services IP Range"
   type = string
 }
