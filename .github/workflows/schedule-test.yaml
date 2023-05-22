@@ -1,5 +1,5 @@
-name: Terraform Create
-run-name: Terraform create triggered via ${{ github.event_name }} by ${{ github.actor }}
+name: Schedule Test
+run-name: Schedule test triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
   schedule:
     - cron: "45 18 * * *"
