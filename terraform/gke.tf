@@ -44,7 +44,7 @@ resource "google_container_cluster" "fsmakka_cluster" {
 # Separately Managed Node Pool
 resource "google_container_node_pool" "fsmakka_cluster_nodes" {
   name       = google_container_cluster.fsmakka_cluster.name
-  location   = var.region
+  location   = var.zone
   cluster    = google_container_cluster.fsmakka_cluster.name
   node_count = var.gke_num_nodes
 
