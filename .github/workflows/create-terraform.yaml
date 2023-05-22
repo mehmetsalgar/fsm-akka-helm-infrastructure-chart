@@ -11,6 +11,7 @@ jobs:
         shell: bash
         working-directory: ./terraform
     env:
+      TF_VAR_cluster_name: ${{ vars.GKE_CLUSTER_NAME }}
       TF_VAR_credential: ${{ secrets.GCP_CREDENTIALS }}
     steps:
       - name: Checkout
