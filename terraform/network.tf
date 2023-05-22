@@ -22,4 +22,8 @@ resource "google_compute_subnetwork" "subnet" {
       ip_cidr_range = var.subnetwork_services_ip_range
     }
   ]
+
+  lifecycle {
+    ignore_changes = [secondary_ip_range]
+  }
 }
