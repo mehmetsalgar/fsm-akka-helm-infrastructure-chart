@@ -1,7 +1,7 @@
 # VPC
 resource "google_compute_network" "vpc" {
   name                    = "${var.project}-${var.cluster_name}-vpc"
-  routing_mode            = "GLOBAL"
+  #routing_mode            = "GLOBAL"
   auto_create_subnetworks = "false"
 }
 
