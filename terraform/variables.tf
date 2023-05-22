@@ -26,7 +26,7 @@ variable "region" {
 }
 
 variable "subnetwork_ip_range" {
-  default = "10.40.0.0/20"
+  default = "10.40.0.0/14"
   description = "Google Cloud Subnetwork IP Range"
   type = string
 }
