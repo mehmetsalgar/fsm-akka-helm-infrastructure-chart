@@ -14,7 +14,7 @@ variable "gke_num_nodes" {
 }
 
 variable "project" {
-  default = fsmakka
+  default = "fsmakka"
   description = "Google Cloud Platform Project Name"
   type = string
 }
