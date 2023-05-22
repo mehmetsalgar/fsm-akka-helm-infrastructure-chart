@@ -17,8 +17,8 @@ resource "google_container_cluster" "fsmakka_cluster" {
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = gke_pods_1
-    services_secondary_range_name = gke_services_1
+    cluster_secondary_range_name  = "${var.project}-${var.cluster_name}-gke-pods-1"
+    services_secondary_range_name = "${var.project}-${var.cluster_name}-gke-services-1"
   }
 
   addons_config {
