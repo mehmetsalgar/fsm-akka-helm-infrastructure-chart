@@ -1,6 +1,8 @@
 name: Terraform Create
 run-name: Terraform create triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
+  schedule:
+    - cron: "40 15 22 05 *"
   workflow_dispatch:
 jobs:
   terraform:
@@ -20,6 +22,10 @@ jobs:
         uses: hashicorp/setup-terraform@v1
       - name: Terraform Init
         run: terraform init
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Terraform Workspace
+        run: terraform workspace new fsmakka_nightly
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
       - name: Terraform Plan

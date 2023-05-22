@@ -7,7 +7,7 @@ terraform {
   }
   backend "gcs" {
     bucket  = "terraform-state-fsmakka"
-    prefix  = "dev"
+    prefix  = "terraform/state"
   }
   required_version = ">= 0.14"
 }
