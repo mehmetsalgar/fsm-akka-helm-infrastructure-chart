@@ -4,6 +4,7 @@ on:
   push:
     paths-ignore:
       - '.github/**'
+      - 'terraform/**'
 jobs:
   call-helm-publish:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-publish.yaml@master
