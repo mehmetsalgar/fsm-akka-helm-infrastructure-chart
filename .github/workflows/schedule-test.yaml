@@ -1,0 +1,12 @@
+name: Terraform Create
+run-name: Terraform create triggered via ${{ github.event_name }} by ${{ github.actor }}
+on:
+  schedule:
+    - cron: "45 18 * * *"
+jobs:
+  schedule_test:
+    runs-on: ubuntu-latest
+    steps:
+      - id: test
+        run: |
+          echo "test"

@@ -37,8 +37,8 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
       - name: Terraform Workspace Destroy
-        run: -|
+        run: |
           terraform workspace select default
-          terraform workspace destroy fsmakka_nightly
+          terraform workspace delete fsmakka_nightly
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}

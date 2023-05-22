@@ -1,8 +1,7 @@
 name: Terraform Create
 run-name: Terraform create triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
-  schedule:
-    - cron: "45 * * * *"
+  workflow_dispatch:
 jobs:
   terraform:
     name: 'Terraform'
