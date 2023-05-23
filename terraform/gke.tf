@@ -59,7 +59,7 @@ resource "google_container_node_pool" "fsmakka_cluster_nodes" {
     }
 
     # preemptible  = true
-    machine_type = "e2-medium"
+    machine_type = var.machine_type
     tags         = ["gke-node", "${var.project}-${var.cluster_name}"]
     metadata = {
       disable-legacy-endpoints = "true"
