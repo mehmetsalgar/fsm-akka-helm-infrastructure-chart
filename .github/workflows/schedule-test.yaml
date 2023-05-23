@@ -2,7 +2,7 @@ name: Schedule Test
 run-name: Schedule test triggered via ${{ github.event_name }} by ${{ github.actor }}
 on:
   schedule:
-    - cron: "45 18 * * *"
+    - cron: "45 8 * * *"
 jobs:
   schedule_test:
     runs-on: ubuntu-latest
