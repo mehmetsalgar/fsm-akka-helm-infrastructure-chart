@@ -9,7 +9,7 @@ on:
       value-file:
         required: true
         type: string
-      cluster-name:
+      cluster-name-not-normalised:
         type: string
         required: true
 jobs:
@@ -72,5 +72,5 @@ jobs:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     with:
       helm-command: "helm upgrade fsm-akka-infrastructure . --install -n ${{ needs.calculate-namespace.outputs.namespace }} -f ${{ inputs.value-file }}.yaml --create-namespace --version=${{ needs.calculate-version.outputs.semVer }}"
-      cluster-name: "${{ inputs.cluster-name }}"
+      cluster-name-not-normalised: "${{ inputs.cluster-name-not-normalised }}"
     secrets: inherit
