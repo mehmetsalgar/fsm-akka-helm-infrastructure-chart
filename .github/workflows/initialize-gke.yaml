@@ -35,7 +35,11 @@ jobs:
           gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
           gcloud components install gke-gcloud-auth-plugin
           export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-          gcloud container clusters get-credentials fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka
+          until gcloud container clusters get-credentials fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka;
+          do
+            echo "Try again!"
+            sleep 10
+          done
           helm repo add strimzi https://strimzi.io/charts/
           helm repo add elastic https://helm.elastic.co
           helm repo add k8ssandra https://helm.k8ssandra.io/stable
