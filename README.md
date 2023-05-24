@@ -9,6 +9,7 @@ helm repo add elastic https://helm.elastic.co
 helm install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
 
 https://docs-v2.k8ssandra.io/install/local/single-cluster-helm/
+helm repo add k8ssandra https://helm.k8ssandra.io/stable
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
 helm install k8ssandra-operator k8ssandra/k8ssandra-operator -n k8ssandra-operator --create-namespace --set global.clusterScoped=true
 
