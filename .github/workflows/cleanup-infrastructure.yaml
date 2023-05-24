@@ -6,6 +6,9 @@ on:
       branch-name:
         required: true
         type: string
+      cluster-name:
+        type: string
+        required: true
 jobs:
   calculate-namespace:
     runs-on: ubuntu-latest
@@ -40,5 +43,7 @@ jobs:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     needs: calculate-namespace
     with:
-      helm-command: "helm delete fsm-akka-infrastructure -n ${{ needs.calculate-namespace.outputs.namespace }}"
+      helm-command: "helm delete fsm-akka-infrastructure -n ${{ needs.calculate-namespace.outputs.namespace }}
+                     kubectl delete namespace ${{ needs.calculate-namespace.outputs.namespace }}"
+      cluster-name: ${{ inputs.cluster-name }}
     secrets: inherit
