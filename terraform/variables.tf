@@ -13,11 +13,11 @@ variable "gke_num_nodes" {
   description = "number of gke nodes for Node Pool "
 }
 
-
 variable "machine_type" {
   default = "e2-medium"
   description = "machine type for our Node Pool"
 }
+
 variable "project" {
   default = "fsmakka"
   description = "Google Cloud Platform Project Name"

@@ -9,6 +9,9 @@ on:
       value-file:
         required: true
         type: string
+      day-over:
+        type: boolean
+        default: false
 jobs:
   calculate-version:
     runs-on: ubuntu-latest
@@ -61,12 +64,29 @@ jobs:
           find: '_'
           replace: '-'
           replaceAll: 'true'
+  calculate-cluster-name:
+    runs-on: ubuntu-latest
+    outputs:
+      cluster-name: ${{ steps.dayOver.outputs.cluster_name}}
+    steps:
+      - id: dayOver
+        shell: bash
+        env:
+          DAY_OVER: ${{ inputs.day-over }}
+        run: |
+          if test true -eq $DAY_OVER; then
+            #file exists
+            echo "cluster_name=fsmakka-gke-dev-day-over" >> "$GITHUB_OUTPUT"
+          else
+            echo "cluster_name=fsmakka-gke-dev" >> "$GITHUB_OUTPUT"
+          fi
   call-build-environment-for-branch:
     permissions:
       contents: 'read'
       id-token: 'write'
-    needs: [calculate-namespace, calculate-version]
+    needs: [calculate-namespace, calculate-version, calculate-cluster-name]
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     with:
       helm-command: "helm upgrade fsm-akka-infrastructure . --install -n ${{ needs.calculate-namespace.outputs.namespace }} -f ${{ inputs.value-file }}.yaml --create-namespace --version=${{ needs.calculate-version.outputs.semVer }}"
+      cluster-name: "${{ needs.calculate-cluster-name.outputs.cluster-name }}"
     secrets: inherit
