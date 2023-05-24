@@ -36,20 +36,52 @@ jobs:
         run: terraform apply -auto-approve -input=false
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-  initialise-gke:
+  prepare-gke:
     permissions:
       contents: 'read'
       id-token: 'write'
-    uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
-    with:
-      helm-command: "helm repo add strimzi https://strimzi.io/charts/;
-                     helm repo add elastic https://helm.elastic.co;
-                     helm repo add k8ssandra https://helm.k8ssandra.io/stable;
-                     helm repo add jetstack https://charts.jetstack.io;
-                     helm repo update;
-                     helm install fsm-akka-strimzi strimzi/strimzi-kafka-operator --namespace strimzi-operator --create-namespace --set watchAnyNamespace=true;
-                     helm install elastic-operator elastic/eck-operator -n elastic-system --create-namespace;
-                     helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true;
-                     helm install k8ssandra-operator k8ssandra/k8ssandra-operator -n k8ssandra-operator --create-namespace --set global.clusterScoped=true;"
-      cluster-name-not-normalised: "fsmakka-${{ vars.GKE_CLUSTER_NAME }}"
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          token_format: 'access_token'
+      - name: 'Set up Cloud SDK'
+        id: gcloudSDK
+        uses: google-github-actions/setup-gcloud@v1
+      - id: install
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.12.0'
+      - name: Run Helm Command
+        id: helmCommand
+        shell: bash
+        env:
+          HELM_COMMAND: ${{ inputs.helm-command }}
+          SERVICE_ACCOUNT: ${{ secrets.GCP_CREDENTIALS }}
+        run: |
+          echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
+          gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+          gcloud components install gke-gcloud-auth-plugin
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+          until gcloud container clusters get-credentials fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka;
+          do
+            echo "Try again!"
+            sleep 10
+          done
+          helm repo add strimzi https://strimzi.io/charts/
+          helm repo add elastic https://helm.elastic.co
+          helm repo add k8ssandra https://helm.k8ssandra.io/stable
+          helm repo add jetstack https://charts.jetstack.io
+          helm repo update
+          helm install fsm-akka-strimzi strimzi/strimzi-kafka-operator --namespace strimzi-operator --create-namespace --set watchAnyNamespace=true
+          helm install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
+          helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
+          helm install k8ssandra-operator k8ssandra/k8ssandra-operator -n k8ssandra-operator --create-namespace --set global.clusterScoped=true
+      - name: Check Failure
+        if: steps.helmCommand.outcome != 'success'
+        run: exit 1
