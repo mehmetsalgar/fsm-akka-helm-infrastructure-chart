@@ -73,6 +73,11 @@ jobs:
             echo "Try again!"
             sleep 10
           done
+          until [[ $(gcloud container clusters describe fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka --format json | jq -j '.status') == 'RUNNING' ]];
+          do
+            echo "Try again for status!"
+            sleep 10
+          done
           helm repo add strimzi https://strimzi.io/charts/
           helm repo add elastic https://helm.elastic.co
           helm repo add k8ssandra https://helm.k8ssandra.io/stable
