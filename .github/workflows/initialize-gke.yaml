@@ -45,7 +45,7 @@ jobs:
             echo "Try again for get-credentials!"
             sleep 10
           done
-          echo gcloud container clusters describe fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka --format json | jq '.status'
+          echo "$(gcloud container clusters describe fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka --format json | jq '.status')"
           until [[ $(gcloud container clusters describe fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka --format json | jq '.status') = "RUNNING" ]];
           do
             echo "Try again for status!"
