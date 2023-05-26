@@ -43,7 +43,6 @@ jobs:
     uses: mehmetsalgar/fsm-akka-github-workflows/.github/workflows/helm-install.yaml@master
     needs: calculate-namespace
     with:
-      helm-command: "helm delete fsm-akka-infrastructure -n ${{ needs.calculate-namespace.outputs.namespace }}
-                     kubectl delete namespace ${{ needs.calculate-namespace.outputs.namespace }}"
+      helm-command: "helm delete fsm-akka-infrastructure -n ${{ needs.calculate-namespace.outputs.namespace }}"
       cluster-name-not-normalised: "${{ inputs.cluster-name-not-normalised }}"
     secrets: inherit
