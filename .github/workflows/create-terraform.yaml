@@ -64,8 +64,8 @@ jobs:
           HELM_COMMAND: ${{ inputs.helm-command }}
           SERVICE_ACCOUNT: ${{ secrets.GCP_CREDENTIALS }}
         run: |
-          echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
-          gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+          echo $SERVICE_ACCOUNT > /tmp/${{ github.run_id }}.json
+          gcloud auth activate-service-account --key-file /tmp/${{ github.run_id }}.json
           gcloud components install gke-gcloud-auth-plugin
           export USE_GKE_GCLOUD_AUTH_PLUGIN=True
           until gcloud container clusters get-credentials fsmakka-${{ vars.GKE_CLUSTER_NAME }} --zone europe-west3-c --project fsmakka;
@@ -90,3 +90,17 @@ jobs:
       - name: Check Failure
         if: steps.helmCommand.outcome != 'success'
         run: exit 1
+  prepare-argo-cd:
+    name: Prepare ArgoCD for new GKE Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare ArgoCD for new GKE Cluster Step
+        uses: aurelien-baudet/workflow-dispatch@v2
+        with:
+          workflow: 'prepare-new-gke-cluster.yaml'
+          repo: 'mehmetsalgar/fsm-akka-argocd'
+          ref: "master"
+          token: ${{ secrets.PERSONAL_TOKEN }}
+          wait-for-completion: true
+          wait-for-completion-timeout: 5m
+          wait-for-completion-interval: 10s
